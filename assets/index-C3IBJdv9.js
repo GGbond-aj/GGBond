@@ -1,0 +1,1 @@
+import{d as n,c as s,a as o,u as l,o as a}from"./index-bOcuU5H0.js";const i=n({__name:"index",setup(u){const r=l(),t=()=>{r.push("/home")};return(c,e)=>(a(),s("div",null,[e[0]||(e[0]=o("div",null," hello world ",-1)),o("div",{style:{cursor:"pointer",color:"#42b983"},onClick:t}," 跳转到home ")]))}});export{i as default};
