@@ -74,7 +74,7 @@ onBeforeUnmount(() => { trail.value = []; });
 
     <section id="moments" class="moments section-wrap">
       <div><p class="eyebrow">HERO MOMENTS</p><h2>冒险从不只有一种模样</h2><p>雨天戴着帽子也要保持帅气，赛场上全力冲刺，面对朋友时又总是最温柔。</p></div>
-      <div class="moment-images"><img :src="`${imageBase}login/close-up.jpg`" alt="猪猪侠特写" /><img :src="`${imageBase}login/portrait-character.jpg`" alt="猪猪侠头像" /><img :src="`${imageBase}login/rainy-hero.jpg`" alt="猪猪侠雨中冒险" /></div>
+      <div class="moment-images"><img :src="`${imageBase}login/close-up.jpg`" alt="猪猪侠特写" /><img :src="`${imageBase}login/rainy-hero.jpg`" alt="猪猪侠雨中冒险" /><img :src="`${imageBase}login/portrait-character.jpg`" alt="猪猪侠头像" /></div>
     </section>
 
     <footer>GG BOND · 快乐冒险永不落幕 <span>鼠标移动试试惊喜拖尾</span></footer>
