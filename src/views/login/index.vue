@@ -20,6 +20,7 @@ const activeImage = ref(3);
 const activePhoto = computed(() => gallery[activeImage.value] ?? gallery[0]!);
 
 const goHome = () => {
+  localStorage.setItem('ggbond-trail-image', activePhoto.value.src);
   message.value = '冒险小队，出发！';
   window.setTimeout(() => router.push('/home'), 350);
 };

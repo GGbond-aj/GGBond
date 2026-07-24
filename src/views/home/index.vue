@@ -4,6 +4,7 @@ import { useRouter } from 'vue-router';
 
 const router = useRouter();
 const imageBase = `${import.meta.env.BASE_URL}images/`;
+const selectedTrailImage = ref(localStorage.getItem('ggbond-trail-image') || `${imageBase}login/classic-character.jpg`);
 const trail = ref<Array<{ x: number; y: number; id: number }>>([]);
 let lastPoint = 0;
 
@@ -28,7 +29,7 @@ onBeforeUnmount(() => { trail.value = []; });
 <template>
   <main class="home-page" @pointermove="createTrail">
     <div class="cursor-trail" aria-hidden="true">
-      <img v-for="(item, index) in trail" :key="item.id" :src="`${imageBase}login/classic-character.jpg`" :style="{ left: `${item.x}px`, top: `${item.y}px`, '--delay': `${index * .04}s` }" />
+      <img v-for="(item, index) in trail" :key="item.id" :src="selectedTrailImage" :style="{ left: `${item.x}px`, top: `${item.y}px`, '--delay': `${index * .04}s` }" />
     </div>
 
     <nav class="topbar">
