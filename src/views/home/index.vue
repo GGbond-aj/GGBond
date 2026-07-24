@@ -47,7 +47,7 @@ onBeforeUnmount(() => { trail.value = []; });
       </div>
       <div class="hero-visual">
         <div class="orbit orbit-one"></div><div class="orbit orbit-two"></div><span class="spark s-one">✦</span><span class="spark s-two">✦</span>
-        <div class="portrait"><img :src="`${imageBase}home/rainy-adventure.jpg`" alt="雨中猪猪侠" /><div class="portrait-label"><b>勇气值</b><strong>∞</strong></div></div>
+        <div class="portrait"><img :src="selectedTrailImage" alt="选中的猪猪侠角色" /><div class="portrait-label"><b>勇气值</b><strong>∞</strong></div></div>
         <div class="sticker sticker-one">我就是我<br /><b>不一样的烟火</b></div><div class="sticker sticker-two">GO!</div>
       </div>
       <div class="wave wave-back"></div><div class="wave wave-front"></div>
