@@ -8,12 +8,13 @@ const password = ref('');
 const remember = ref(true);
 const passwordVisible = ref(false);
 const message = ref('');
+const imageBase = `${import.meta.env.BASE_URL}images/login/`;
 const gallery = [
-  { src: '/images/login/rainy-hero.jpg', alt: '雨中造型' },
-  { src: '/images/login/close-up.jpg', alt: '可爱特写' },
-  { src: '/images/login/bow-character.jpg', alt: '蝴蝶结造型' },
-  { src: '/images/login/classic-character.jpg', alt: '经典造型' },
-  { src: '/images/login/portrait-character.jpg', alt: '角色头像' },
+  { src: `${imageBase}rainy-hero.jpg`, alt: '雨中造型' },
+  { src: `${imageBase}close-up.jpg`, alt: '可爱特写' },
+  { src: `${imageBase}bow-character.jpg`, alt: '蝴蝶结造型' },
+  { src: `${imageBase}classic-character.jpg`, alt: '经典造型' },
+  { src: `${imageBase}portrait-character.jpg`, alt: '角色头像' },
 ];
 const activeImage = ref(3);
 const activePhoto = computed(() => gallery[activeImage.value] ?? gallery[0]!);
