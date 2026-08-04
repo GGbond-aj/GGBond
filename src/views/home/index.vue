@@ -61,7 +61,7 @@ onBeforeUnmount(() => { trail.value = []; stopCarousel(); });
         <p class="eyebrow">WELCOME TO THE WONDER WORLD</p>
         <h1>我是猪猪侠！<em>热血和勇气，</em>从不缺席。</h1>
         <p class="lead">从童话世界到浩瀚宇宙，猪猪侠总会和伙伴们一起，用一点点机智、一大把勇气，守护每一份美好。</p>
-        <div class="hero-actions"><a href="#series" class="primary">探索动画宇宙 <span>→</span></a><a href="#about" class="round-play" aria-label="了解角色">▶</a><span>向下滑动，开始冒险</span></div>
+        <div class="hero-actions"><a href="#world" class="primary" @click.prevent="router.push('/world')">探索世界 <span>→</span></a><a href="#about" class="round-play" aria-label="了解角色">▶</a><span>向下滑动，开始冒险</span></div>
       </div>
       <div class="hero-visual">
         <div class="orbit orbit-one"></div><div class="orbit orbit-two"></div><span class="spark s-one">✦</span><span class="spark s-two">✦</span>
