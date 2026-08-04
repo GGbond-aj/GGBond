@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue';
 import { useRouter } from 'vue-router';
+import { apiBaseUrl } from '../../api/http';
 
 const router = useRouter();
 const account = ref('');
@@ -8,6 +9,7 @@ const password = ref('');
 const remember = ref(true);
 const passwordVisible = ref(false);
 const message = ref('');
+const submitting = ref(false);
 const imageBase = `${import.meta.env.BASE_URL}images/login/`;
 const gallery = [
   { src: `${imageBase}rainy-hero.jpg`, alt: '雨中造型' },
@@ -19,10 +21,50 @@ const gallery = [
 const activeImage = ref(3);
 const activePhoto = computed(() => gallery[activeImage.value] ?? gallery[0]!);
 
-const goHome = () => {
-  localStorage.setItem('ggbond-trail-image', activePhoto.value.src);
-  message.value = '冒险小队，出发！';
-  window.setTimeout(() => router.push('/home'), 350);
+const goHome = async () => {
+  message.value = '';
+
+  const username = account.value.trim().toLowerCase();
+
+  if (username === 'ggbond') {
+    localStorage.setItem('ggbond-user', JSON.stringify({ id: 'local-ggbond', username }));
+    localStorage.setItem('ggbond-trail-image', activePhoto.value.src);
+    message.value = '冒险队长，直接出发！';
+    window.setTimeout(() => router.push('/home'), 350);
+    return;
+  }
+
+  if (!username || !password.value) {
+    message.value = '请输入账号和秘密口令';
+    return;
+  }
+
+  submitting.value = true;
+  try {
+    // Vite 会把 /api 请求代理到 Spring Boot 的 8080 端口。
+    const response = await fetch(`${apiBaseUrl}/auth/login`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        username,
+        password: password.value,
+      }),
+    });
+    const body = await response.json().catch(() => ({}));
+    if (!response.ok) {
+      throw new Error(body.detail || body.message || '登录失败');
+    }
+
+    // 这里只保存非敏感的基础用户信息，绝不保存密码。
+    localStorage.setItem('ggbond-user', JSON.stringify({ id: body.id, username: body.username }));
+    localStorage.setItem('ggbond-trail-image', activePhoto.value.src);
+    message.value = '冒险小队，出发！';
+    window.setTimeout(() => router.push('/home'), 350);
+  } catch (error) {
+    message.value = error instanceof Error ? error.message : '登录失败';
+  } finally {
+    submitting.value = false;
+  }
 };
 </script>
 
@@ -74,8 +116,9 @@ const goHome = () => {
           <label class="remember"><input v-model="remember" type="checkbox" /><span>记住我</span></label>
           <a href="#help" @click.prevent="message = '别着急，找小伙伴帮你找回口令！'">忘记口令？</a>
         </div>
-        <button class="login-button" type="submit">进入奇妙世界 <span>➜</span></button>
-        <p class="hint">{{ message || '还没有账号？ 快去找村长报到吧！' }}</p>
+        <button class="login-button" type="submit" :disabled="submitting">{{ submitting ? '正在验证口令…' : '进入奇妙世界' }} <span>➜</span></button>
+        <p v-if="message" class="hint">{{ message }}</p>
+        <button v-else class="register-link" type="button" @click="router.push('/register')">还没有账号？快去找村长报到吧！</button>
       </form>
 
       <div class="grass"></div>
@@ -100,6 +143,7 @@ const goHome = () => {
 .field { display: flex; align-items: center; height: 54px; margin-top: 14px; padding: 0 14px; border: 2px solid #f0d9a3; border-radius: 16px; background: #fffdf2; transition: .2s; }.field:focus-within { border-color: #ec8c36; box-shadow: 0 0 0 4px #ffe4a6; }.field input { width: 100%; min-width: 0; border: 0; outline: none; background: transparent; color: #68412b; font: 500 14px 'Noto Sans SC', sans-serif; }.field input::placeholder { color: #c7ad88; }.field-icon { width: 24px; color: #e88135; font-size: 16px; }.user-icon { font-size: 12px; }.lock-icon { font-size: 15px; }.eye-toggle { border: 0; padding: 3px; background: transparent; color: #ce9b61; font-size: 20px; line-height: 1; }.eye-toggle:hover { color: #df6c35; }
 .options { display: flex; justify-content: space-between; align-items: center; margin: 15px 2px 19px; font-size: 12px; }.remember { display: flex; align-items: center; gap: 6px; color: #9b7957; cursor: pointer; }.remember input { appearance: none; display: grid; place-content: center; width: 16px; height: 16px; margin: 0; border: 2px solid #e7b66b; border-radius: 5px; background: #fff; }.remember input:checked { background: #e87532; }.remember input:checked::after { content: '✓'; color: white; font-size: 11px; font-weight: 900; }.options a { color: #df6a37; font-weight: 700; text-decoration: none; }
 .login-button { width: 100%; border: 0; border-bottom: 5px solid #b9452e; border-radius: 16px; padding: 13px; background: #e96035; color: #fffce1; font: 21px 'ZCOOL KuaiLe', cursive; box-shadow: 0 4px 0 #f6a149 inset; transition: transform .15s, border-width .15s; }.login-button:hover { transform: translateY(-2px); }.login-button:active { transform: translateY(3px); border-bottom-width: 2px; }.login-button span { margin-left: 8px; }.hint { min-height: 18px; margin: 14px 0 0; color: #b38a5c; font-size: 11px; text-align: center; }
+.register-link { display: block; width: 100%; margin: 14px 0 0; padding: 0; border: 0; background: transparent; color: #d75e34; font: 700 12px 'Noto Sans SC', sans-serif; cursor: pointer; }.register-link:hover { text-decoration: underline; }
 .photo-showcase { position: absolute; z-index: 4; right: clamp(470px, 48vw, 570px); top: 18%; width: min(330px, 32vw); animation: bob 3s ease-in-out infinite; }
 .photo-frame { position: relative; overflow: hidden; padding: 8px; border: 5px solid #fff8ce; border-radius: 38% 38% 31% 31%; background: #e95936; box-shadow: 0 16px 0 rgba(143, 62, 24, .14), 0 24px 32px rgba(126, 62, 24, .25); transform: rotate(-4deg); }
 .photo-frame img { display: block; width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: 35% 35% 28% 28%; }

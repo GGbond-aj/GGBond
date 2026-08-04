@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
+import { apiBaseUrl } from '../../api/http';
 
 const router = useRouter();
 const username = ref('');
@@ -29,7 +30,7 @@ const register = async () => {
 
   submitting.value = true;
   try {
-    const response = await fetch('/api/auth/register', {
+    const response = await fetch(`${apiBaseUrl}/auth/register`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({

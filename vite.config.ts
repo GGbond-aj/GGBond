@@ -4,6 +4,14 @@ import vue from '@vitejs/plugin-vue'
 
 export default defineConfig({
   plugins: [vue()],
+  server: {
+    proxy: {
+      '/api': {
+        target: 'http://127.0.0.1:8080',
+        changeOrigin: true
+      }
+    }
+  },
   // 关键配置：适配 GitHub Pages 路径
   base: '/GGBond/', // GitHub Pages 项目仓库路径
   build: {

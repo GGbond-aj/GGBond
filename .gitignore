@@ -10,6 +10,10 @@ lerna-debug.log*
 node_modules
 dist-ssr
 *.local
+.nuxt
+.output
+.data
+.nuxt-dev*.log
 
 # Editor directories and files
 .vscode/*
